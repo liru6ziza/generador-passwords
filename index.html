@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generador de Contraseñas Seguras</title>
+  <style>
+    body {
+      font-family: system-ui, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      height: 100vh;
+      padding: 40px 20px;
+    }
+    h1 { color: #38bdf8; }
+    label, input, button {
+      font-size: 16px;
+      margin: 5px;
+    }
+    #out {
+      font-size: 22px;
+      padding: 12px;
+      background: #1e293b;
+      border-radius: 8px;
+      margin-top: 10px;
+      user-select: all;
+      width: 100%;
+      max-width: 480px;
+      word-break: break-all;
+    }
+    button {
+      background: #38bdf8;
+      border: none;
+      color: #0f172a;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    button:hover { background: #7dd3fc; }
+  </style>
+</head>
+<body>
+  <h1>🔒 Generador de Contraseñas Seguras</h1>
+  <label>Longitud: <input id="len" type="number" min="8" max="128" value="16"></label><br>
+  <label><input id="uc" type="checkbox" checked> Mayúsculas</label>
+  <label><input id="lc" type="checkbox" checked> Minúsculas</label>
+  <label><input id="dg" type="checkbox" checked> Números</label>
+  <label><input id="sy" type="checkbox"> Símbolos</label>
+  <br>
+  <button id="gen">Generar Contraseña</button>
+  <pre id="out"></pre>
+  <p style="opacity:.7;">Todo se genera localmente en tu navegador. Nada se guarda ni se envía.</p>
+
+  <script>
+    const sets = {
+      uc: "ABCDEFGHJKLMNPQRSTUVWXYZ",
+      lc: "abcdefghijkmnopqrstuvwxyz",
+      dg: "23456789",
+      sy: "!@#$%^&*()-_=+[]{};:,.?/"
+    };
+    function randBytes(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return a;}
+    function pick(chars,n){
+      const out=[], m=chars.length;
+      const bytes = randBytes(n*2);
+      let j=0;
+      for(let i=0;i<n;i++){
+        let x;
+        do { x = bytes[j++]; if(j>=bytes.length){j=0; bytes.set(randBytes(bytes.length));} } while (x >= Math.floor(256/m)*m);
+        out.push(chars[x % m]);
+      }
+      return out.join('');
+    }
+    function buildSet(cfg){
+      let s="";
+      if(cfg.uc) s+=sets.uc;
+      if(cfg.lc) s+=sets.lc;
+      if(cfg.dg) s+=sets.dg;
+      if(cfg.sy) s+=sets.sy;
+      return s;
+    }
+    gen.onclick = () => {
+      const cfg = { len:+len.value, uc:uc.checked, lc:lc.checked, dg:dg.checked, sy:sy.checked };
+      let pool = buildSet(cfg);
+      if(!pool){ out.textContent="Selecciona al menos un tipo de carácter."; return; }
+      let base="";
+      if(cfg.uc) base+=pick(sets.uc,1);
+      if(cfg.lc) base+=pick(sets.lc,1);
+      if(cfg.dg) base+=pick(sets.dg,1);
+      if(cfg.sy) base+=pick(sets.sy,1);
+      const rest=Math.max(cfg.len-base.length,0);
+      let pwd=base+pick(pool,rest);
+      pwd=pwd.split('').sort(()=>crypto.getRandomValues(new Uint8Array(1))[0]-128).join('');
+      out.textContent=pwd;
+    };
+  </script>
+</body>
+</html>
