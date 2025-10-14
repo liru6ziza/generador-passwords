@@ -1,103 +1,366 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Generador de Contraseñas Seguras</title>
-  <style>
-    body {
-      font-family: system-ui, sans-serif;
-      background: #0f172a;
-      color: #e2e8f0;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-start;
-      height: 100vh;
-      padding: 40px 20px;
-    }
-    h1 { color: #38bdf8; }
-    label, input, button {
-      font-size: 16px;
-      margin: 5px;
-    }
-    #out {
-      font-size: 22px;
-      padding: 12px;
-      background: #1e293b;
-      border-radius: 8px;
-      margin-top: 10px;
-      user-select: all;
-      width: 100%;
-      max-width: 480px;
-      word-break: break-all;
-    }
-    button {
-      background: #38bdf8;
-      border: none;
-      color: #0f172a;
-      padding: 10px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-weight: bold;
-      margin-top: 10px;
-    }
-    button:hover { background: #7dd3fc; }
-  </style>
-</head>
-<body>
-  <h1>🔒 Generador de Contraseñas Seguras</h1>
-  <label>Longitud: <input id="len" type="number" min="8" max="128" value="16"></label><br>
-  <label><input id="uc" type="checkbox" checked> Mayúsculas</label>
-  <label><input id="lc" type="checkbox" checked> Minúsculas</label>
-  <label><input id="dg" type="checkbox" checked> Números</label>
-  <label><input id="sy" type="checkbox"> Símbolos</label>
-  <br>
-  <button id="gen">Generar Contraseña</button>
-  <pre id="out"></pre>
-  <p style="opacity:.7;">Todo se genera localmente en tu navegador. Nada se guarda ni se envía.</p>
+  <!-- ===== Meta básicas ===== -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PasswordMX | Generador de Contraseñas Seguras</title>
+  <meta name="description" content="Genera contraseñas seguras y passphrases al instante. 100% local, rápido y sin guardar datos. Copiar con un clic, selector de longitud, y medidor de fuerza." />
+  <meta name="keywords" content="generador contraseñas, passwords seguras, passphrases, zxcvbn, seguridad, Mexico, PasswordMX" />
+  <meta name="author" content="PasswordMX" />
 
+  <!-- ===== Open Graph / Twitter ===== -->
+  <meta property="og:title" content="PasswordMX — Generador de Contraseñas Seguras" />
+  <meta property="og:description" content="Crea contraseñas fuertes y passphrases en tu navegador. Nada se guarda ni se envía." />
+  <meta property="og:url" content="https://passwordmx.online" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://passwordmx.online/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="PasswordMX — Generador de Contraseñas Seguras" />
+  <meta name="twitter:description" content="Crea contraseñas fuertes y passphrases en tu navegador." />
+  <meta name="twitter:image" content="https://passwordmx.online/og-image.png" />
+  <link rel="canonical" href="https://passwordmx.online" />
+
+  <!-- ===== Favicon / Icons ===== -->
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <!-- fallback SVG minimal por si falta el PNG -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 40 40"><rect rx="6" width="24" height="24" fill="%231e293b"/><path d="M6 11v-2a6 6 0 1112 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7a1 1 0 011-1h1zm2 0h8v-2a4 4 0 10-8 0v2z" fill="%23fff"/></svg>' />
+  <!-- iOS -->
+  <link rel="apple-touch-icon" href="favicon.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- ===== ✅ PWA ===== -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#0f172a" />
   <script>
-    const sets = {
-      uc: "ABCDEFGHJKLMNPQRSTUVWXYZ",
-      lc: "abcdefghijkmnopqrstuvwxyz",
-      dg: "23456789",
-      sy: "!@#$%^&*()-_=+[]{};:,.?/"
-    };
-    function randBytes(n){const a=new Uint8Array(n);crypto.getRandomValues(a);return a;}
-    function pick(chars,n){
-      const out=[], m=chars.length;
-      const bytes = randBytes(n*2);
-      let j=0;
-      for(let i=0;i<n;i++){
-        let x;
-        do { x = bytes[j++]; if(j>=bytes.length){j=0; bytes.set(randBytes(bytes.length));} } while (x >= Math.floor(256/m)*m);
-        out.push(chars[x % m]);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js')
+          .then(() => console.log('✅ Service Worker registrado'))
+          .catch(err => console.log('❌ Error registrando SW:', err));
+      });
+    }
+  </script>
+
+  <!-- ===== Estilos ===== -->
+  <style>
+    :root{
+      --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0;
+      --accent:#38bdf8; --accent-2:#22d3ee; --ok:#22c55e; --warn:#f59e0b; --bad:#ef4444;
+      --shadow:0 10px 30px rgba(0,0,0,.25);
+    }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; --accent-2:#06b6d4; --shadow:0 10px 24px rgba(2,8,23,.08); }
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0; font:16px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial, "Noto Sans";
+      background: radial-gradient(1200px 600px at 50% -10%, rgba(56,189,248,.15), transparent 70%), var(--bg);
+      color:var(--text); display:flex; align-items:center; justify-content:center; padding:24px;
+    }
+
+    .container{ width:100%; max-width:900px; display:grid; gap:18px; grid-template-columns:1.1fr .9fr; align-items:start; }
+    @media (max-width:880px){ .container{ grid-template-columns:1fr; } }
+
+    header{ grid-column:1/-1; text-align:center; margin-bottom:6px; }
+    header h1{ margin:0 0 8px; font-size:clamp(24px,4vw,34px); color:var(--accent); }
+    header p{ margin:0; color:var(--muted); }
+
+    .card{ background:var(--card); border-radius:14px; box-shadow:var(--shadow); padding:18px; }
+    .controls label{ display:flex; align-items:center; gap:10px; margin:8px 0; color:var(--text); }
+    .row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+    .muted{ color:var(--muted); font-size:14px; }
+
+    .range{ display:grid; gap:6px; }
+    input[type="range"]{ width:100%; }
+
+    .out{
+      display:flex; align-items:center; gap:10px; margin-top:8px; background:#1f2937; border-radius:10px; padding:10px 12px; overflow:auto; white-space:nowrap;
+    }
+    @media (prefers-color-scheme: light){ .out{ background:#f1f5f9; } }
+    .out code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:18px; }
+
+    .btn{
+      border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer;
+      background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#031525;
+      transition:transform .02s ease-in-out, opacity .2s;
+    }
+    .btn:active{ transform: translateY(1px); }
+    .btn.ghost{ background:transparent; border:2px solid rgba(148,163,184,.3); color:var(--text); }
+
+    .meter{ height:10px; border-radius:999px; background:rgba(148,163,184,.25); overflow:hidden; }
+    .meter>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--bad), var(--warn), var(--ok)); transition:width .25s ease; }
+    .score{ font-weight:600; }
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+    .sep{ height:1px; background:rgba(148,163,184,.2); margin:12px 0; }
+    .badge{ font-size:12px; color:#0b2a36; background:var(--accent); border-radius:999px; padding:4px 8px; font-weight:700; }
+    footer{ grid-column:1/-1; text-align:center; color:var(--muted); font-size:13px; }
+    footer .links{ display:flex; gap:14px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; }
+    footer a{ color:var(--accent); text-decoration:none; }
+    footer a.muted{ color:var(--muted); }
+    footer .btn{ display:inline-block; }
+  </style>
+
+  <!-- zxcvbn (medidor de fuerza) -->
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+</head>
+
+<body>
+  <main class="container">
+    <header>
+      <h1>🔒 Password<span class="badge">MX</span> — Generador de Contraseñas y Passphrases</h1>
+      <p class="muted">Todo se genera <strong>localmente</strong> en tu navegador. No se envía ni guarda nada.</p>
+    </header>
+
+    <!-- ===== Panel principal ===== -->
+    <section class="card controls" aria-label="Opciones de generación">
+      <div class="row" style="justify-content:space-between;align-items:flex-end">
+        <div>
+          <div class="muted" style="margin-bottom:4px">Modo</div>
+          <div class="row">
+            <label><input type="radio" name="mode" value="password" checked> Contraseña</label>
+            <label><input type="radio" name="mode" value="passphrase"> Passphrase</label>
+          </div>
+        </div>
+        <button id="regen" class="btn ghost" title="Regenerar">↻ Regenerar</button>
+      </div>
+
+      <!-- Contraseña -->
+      <div id="pane-password">
+        <div class="range">
+          <div class="row" style="justify-content:space-between">
+            <label for="len" class="muted">Longitud</label>
+            <div><strong id="lenVal">16</strong></div>
+          </div>
+          <input id="len" type="range" min="8" max="64" step="1" value="16" />
+        </div>
+
+        <div class="grid-2">
+          <label><input id="optU" type="checkbox" checked> Mayúsculas</label>
+          <label><input id="optL" type="checkbox" checked> Minúsculas</label>
+          <label><input id="optN" type="checkbox" checked> Números</label>
+          <label><input id="optS" type="checkbox"> Símbolos</label>
+          <label><input id="optEasy" type="checkbox"> Fácil de leer (sin O/0, I/1)</label>
+          <label><input id="optNoRep" type="checkbox"> Evitar repetidos</label>
+        </div>
+
+        <div class="out">
+          <code id="out"></code>
+          <button id="copyBtn" class="btn">Copiar</button>
+        </div>
+
+        <div class="row" style="align-items:center; gap:12px; margin-top:8px">
+          <div class="meter" aria-hidden="true" style="flex:1"><i id="meter"></i></div>
+          <div class="score" id="scoreTxt" aria-live="polite">—</div>
+        </div>
+        <div class="muted" id="estTxt">Fuerza: —</div>
+      </div>
+
+      <div class="sep"></div>
+
+      <!-- Passphrase -->
+      <div id="pane-passphrase" style="display:none">
+        <div class="grid-2">
+          <label><span class="muted">Palabras</span>
+            <input id="ppCount" type="number" min="3" max="12" value="4" style="width:90px; margin-left:8px">
+          </label>
+          <label><span class="muted">Separador</span>
+            <select id="ppSep" style="margin-left:8px">
+              <option value="-">-</option>
+              <option value="_">_</option>
+              <option value=" ">espacio</option>
+              <option value=".">.</option>
+            </select>
+          </label>
+          <label><input id="ppCap" type="checkbox"> Capitalizar</label>
+          <label><input id="ppNum" type="checkbox"> Añadir número</label>
+          <label><input id="ppSym" type="checkbox"> Añadir símbolo</label>
+        </div>
+
+        <div class="out">
+          <code id="outPP"></code>
+          <button id="copyBtnPP" class="btn">Copiar</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== Lateral / Explicación ===== -->
+    <aside class="card">
+      <h3 style="margin:0 0 8px">¿Qué hace única a PasswordMX?</h3>
+      <ul style="margin:0 0 10px 18px; color:var(--muted)">
+        <li>Generación <strong>100% local</strong> con <code>crypto.getRandomValues()</code>.</li>
+        <li><strong>Medidor de fuerza</strong> (zxcvbn) con estimación de tiempo de crackeo.</li>
+        <li>Opciones: símbolos, evitar repetidos, fácil de leer.</li>
+        <li><strong>Modo Passphrase</strong> (frases de palabras) con separadores.</li>
+      </ul>
+      <p class="muted">Recomendamos usar un <em>gestor de contraseñas</em> (Bitwarden, 1Password, etc.).</p>
+      <p class="muted" style="font-size:12px">Aviso: no almacenamos ni compartimos tus contraseñas. Uso bajo tu propia responsabilidad.</p>
+    </aside>
+
+    <footer>
+      © 2025 PasswordMX — Hecho con 💙 en México.
+      <div class="links">
+        <a class="muted" href="/faq.html">FAQ</a>
+        <a class="muted" href="/privacy.html">Privacidad</a>
+        <a class="btn" href="https://www.buymeacoffee.com/TU_USER" target="_blank" rel="noopener">Invítame un café ☕</a>
+        <a class="muted" href="https://github.com" target="_blank" rel="noopener">Código</a>
+        <button id="shareBtn" class="btn ghost">Compartir</button>
+      </div>
+    </footer>
+  </main>
+
+  <!-- ===== Botón Compartir ===== -->
+  <script>
+    (function(){
+      const btn = document.getElementById('shareBtn');
+      const url = 'https://passwordmx.online/?utm_source=share&utm_medium=button&utm_campaign=app';
+      btn?.addEventListener('click', async () => {
+        const data = { title: 'PasswordMX', text: 'Genera contraseñas seguras y passphrases (100% local).', url };
+        if (navigator.share) {
+          try { await navigator.share(data); } catch(e){}
+        } else {
+          await navigator.clipboard.writeText(url);
+          btn.textContent = '¡Link copiado!'; setTimeout(()=>btn.textContent='Compartir',900);
+        }
+      });
+    })();
+  </script>
+
+  <!-- ===== Lógica ===== -->
+  <script>
+    // ------- utilidades -------
+    const randBytes = (n) => crypto.getRandomValues(new Uint8Array(n));
+
+    // ------- contraseña -------
+    const UPP = "ABCDEFGHJKLMNPQRSTUVWXYZ";
+    const LOW = "abcdefghijkmnopqrstuvwxyz";
+    const NUM = "0123456789";
+    const SYM = "!@#$%^&*()_+-=[]{};:,.?/";
+
+    function genPassword(){
+      const len = +document.getElementById('len').value;
+      const useU = document.getElementById('optU').checked;
+      const useL = document.getElementById('optL').checked;
+      const useN = document.getElementById('optN').checked;
+      const useS = document.getElementById('optS').checked;
+      const easy = document.getElementById('optEasy').checked;
+      const noRep = document.getElementById('optNoRep').checked;
+
+      let pool = "";
+      if(useU) pool += UPP;
+      if(useL) pool += LOW;
+      if(useN) pool += NUM;
+      if(useS) pool += SYM;
+      if(!pool) pool = LOW;
+
+      let out = "";
+      let last = "";
+      for(let i=0; i<len; i++){
+        let ch = pool[randBytes(1)[0] % pool.length];
+        if(easy){
+          if("O0".includes(ch)) { i--; continue; }
+          if("Il1".includes(ch)) { i--; continue; }
+        }
+        if(noRep && ch === last){ i--; continue; }
+        out += ch; last = ch;
       }
-      return out.join('');
+      return out;
     }
-    function buildSet(cfg){
-      let s="";
-      if(cfg.uc) s+=sets.uc;
-      if(cfg.lc) s+=sets.lc;
-      if(cfg.dg) s+=sets.dg;
-      if(cfg.sy) s+=sets.sy;
-      return s;
+
+    // ------- passphrase -------
+    const WORDS = [
+      "cielo","luz","río","fuego","nube","sol","luna","piedra","bosque","trueno",
+      "viento","tigre","duna","nieve","cáliz","nexo","marea","eco","nodo","cabal"
+    ];
+    function genPassphrase(){
+      const n = Math.max(3, Math.min(12, +document.getElementById('ppCount').value || 4));
+      const sep = document.getElementById('ppSep').value;
+      const capOn = document.getElementById('ppCap').checked;
+      const addNum = document.getElementById('ppNum').checked;
+      const addSym = document.getElementById('ppSym').checked;
+      const symPool = "!$%&*+?@#";
+
+      let parts = [];
+      for(let i=0;i<n;i++){
+        let w = WORDS[randBytes(1)[0] % WORDS.length];
+        if(capOn) w = w.charAt(0).toUpperCase() + w.slice(1);
+        parts.push(w);
+      }
+      let out = parts.join(sep);
+      if(addNum) out += (sep === " " ? "" : "") + String(randBytes(1)[0] % 100);
+      if(addSym) out += (sep === " " ? "" : "") + symPool[randBytes(1)[0] % symPool.length];
+      return out;
     }
-    gen.onclick = () => {
-      const cfg = { len:+len.value, uc:uc.checked, lc:lc.checked, dg:dg.checked, sy:sy.checked };
-      let pool = buildSet(cfg);
-      if(!pool){ out.textContent="Selecciona al menos un tipo de carácter."; return; }
-      let base="";
-      if(cfg.uc) base+=pick(sets.uc,1);
-      if(cfg.lc) base+=pick(sets.lc,1);
-      if(cfg.dg) base+=pick(sets.dg,1);
-      if(cfg.sy) base+=pick(sets.sy,1);
-      const rest=Math.max(cfg.len-base.length,0);
-      let pwd=base+pick(pool,rest);
-      pwd=pwd.split('').sort(()=>crypto.getRandomValues(new Uint8Array(1))[0]-128).join('');
-      out.textContent=pwd;
-    };
+
+    // ------- UI / estado -------
+    const out = document.getElementById('out');
+    const outPP = document.getElementById('outPP');
+    const meter = document.getElementById('meter');
+    const scoreTxt = document.getElementById('scoreTxt');
+    const estTxt = document.getElementById('estTxt');
+    const lenEl = document.getElementById('len');
+    const lenVal = document.getElementById('lenVal');
+    const copyBtn = document.getElementById('copyBtn');
+    const copyBtnPP = document.getElementById('copyBtnPP');
+    const panePwd = document.getElementById('pane-password');
+    const panePP  = document.getElementById('pane-passphrase');
+    const regen = document.getElementById('regen');
+
+    function update(){
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      if(mode === "password"){
+        const pwd = genPassword();
+        out.textContent = pwd;
+        // fuerza
+        if(typeof zxcvbn === "function"){
+          const z = zxcvbn(pwd);
+          const pct = Math.min(100, (z.score+1)*20 + Math.min(60, (z.guesses_log10||0)*2));
+          meter.style.width = pct + "%";
+          scoreTxt.textContent = ["Muy débil","Débil","Aceptable","Fuerte","Muy fuerte"][z.score] || "—";
+          const t = (z.crack_times_display && z.crack_times_display.offline_fast_hashing_1e10_per_second) || "";
+          estTxt.textContent = "Estimado de crackeo: " + t;
+        } else {
+          meter.style.width = "0%"; scoreTxt.textContent = "—"; estTxt.textContent = "Fuerza: —";
+        }
+      } else {
+        const pp = genPassphrase();
+        outPP.textContent = pp;
+        meter.style.width = "0%"; scoreTxt.textContent = "—"; estTxt.textContent = "Modo passphrase";
+      }
+      lenVal.textContent = lenEl.value;
+    }
+
+    // eventos
+    document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', update));
+    document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
+      const mode = document.querySelector('input[name="mode"]:checked').value;
+      panePwd.style.display = (mode === "password") ? "" : "none";
+      panePP.style.display  = (mode === "passphrase") ? "" : "none";
+      update();
+    }));
+    regen.addEventListener('click', update);
+
+    async function copyText(text, btn){
+      try{
+        await navigator.clipboard.writeText(text);
+        btn.textContent = "¡Copiado!";
+      }catch(e){
+        const r = document.createRange(); r.selectNodeContents(btn.previousElementSibling);
+        const sel = getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        document.execCommand('copy'); sel.removeAllRanges();
+        btn.textContent = "¡Copiado!";
+      }
+      setTimeout(()=> btn.textContent = "Copiar", 900);
+    }
+    copyBtn.addEventListener('click', () => copyText(out.textContent, copyBtn));
+    copyBtnPP.addEventListener('click', () => copyText(outPP.textContent, copyBtnPP));
+
+    // primera render
+    update();
   </script>
 </body>
 </html>
