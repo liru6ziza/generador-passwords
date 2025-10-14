@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FAQ | PasswordMX</title>
+  <meta name="description" content="Preguntas frecuentes de PasswordMX: cómo generamos contraseñas, privacidad y uso.">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#0f172a">
+  <style>
+    :root{ --bg:#0f172a; --card:#111827; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;}
+    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto}
+    .wrap{max-width:900px;margin:auto;padding:28px}
+    a{color:var(--accent)}
+    .card{background:var(--card);border-radius:14px;padding:18px;margin:12px 0}
+    h1{margin:0 0 12px;color:var(--accent)}
+    h2{margin:12px 0}
+    .muted{color:var(--muted)}
+    nav{display:flex;gap:14px;margin-bottom:12px}
+    nav a{color:var(--muted);text-decoration:none}
+    nav a:hover{color:var(--text)}
+    footer{color:var(--muted);text-align:center;margin-top:24px;font-size:13px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <nav>
+      <a href="/">← Volver</a>
+      <a href="/privacy.html">Privacidad</a>
+    </nav>
+    <h1>Preguntas frecuentes</h1>
+
+    <div class="card">
+      <h2>¿Se guardan o envían mis contraseñas?</h2>
+      <p>No. Todo se genera localmente en tu navegador usando <code>crypto.getRandomValues()</code>. No tenemos servidores que reciban nada.</p>
+    </div>
+
+    <div class="card">
+      <h2>¿Cómo se mide la “fuerza”?</h2>
+      <p>Usamos <code>zxcvbn</code> para estimar la dificultad de crackeo. Es una guía, no una garantía absoluta.</p>
+    </div>
+
+    <div class="card">
+      <h2>¿Puedo usar frases de palabras?</h2>
+      <p>Sí. Activa el modo “Passphrase” en la página principal y elige número de palabras, separador y extras.</p>
+    </div>
+
+    <div class="card">
+      <h2>¿Cómo apoyan el proyecto?</h2>
+      <p>Puedes invitar un café ☕ o dejar propina:</p>
+      <p><a class="btn" href="https://www.buymeacoffee.com/TU_USER" target="_blank" rel="noopener">Invítame un café</a></p>
+      <p class="muted">También mostramos anuncios discretos para cubrir costos del dominio y mantener el proyecto gratuito.</p>
+    </div>
+
+    <footer>© 2025 PasswordMX</footer>
+  </div>
+</body>
+</html>
