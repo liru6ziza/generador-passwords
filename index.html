@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+  <!-- ===== Analytics (Plausible) ===== -->
+  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
+
   <!-- ===== Meta básicas ===== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -107,6 +110,21 @@
     footer a.muted{ color:var(--muted); }
     footer .btn{ display:inline-block; }
   </style>
+
+  <!-- ===== SEO: JSON-LD ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "PasswordMX",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Web",
+    "description": "Generador de contraseñas y passphrases 100% local, sin guardar datos.",
+    "url": "https://passwordmx.online",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+    "author": { "@type": "Organization", "name": "PasswordMX" }
+  }
+  </script>
 
   <!-- zxcvbn (medidor de fuerza) -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
