@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- ===== Analytics (Plausible) ===== -->
-  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
-
   <!-- ===== Meta básicas ===== -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -18,11 +15,15 @@
   <meta property="og:url" content="https://passwordmx.online" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://passwordmx.online/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="PasswordMX — Generador de Contraseñas Seguras" />
   <meta name="twitter:description" content="Crea contraseñas fuertes y passphrases en tu navegador." />
   <meta name="twitter:image" content="https://passwordmx.online/og-image.png" />
+  <meta name="twitter:image:alt" content="PasswordMX: Generador de contraseñas y passphrases 100% local" />
   <link rel="canonical" href="https://passwordmx.online" />
+  <link rel="preload" href="/og-image.png" as="image" imagesrcset="/og-image.png 1x" />
 
   <!-- ===== Favicon / Icons ===== -->
   <link rel="icon" type="image/png" href="favicon.png" />
@@ -45,6 +46,17 @@
       });
     }
   </script>
+
+  <!-- ===== AdSense (reemplaza por tu ID) ===== -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX"
+          crossorigin="anonymous"></script>
+  <!-- Auto ads opcional: descomenta cuando lo actives en AdSense
+  <script>
+    (adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX",
+      enable_page_level_ads: true
+    });
+  </script> -->
 
   <!-- ===== Estilos ===== -->
   <style>
@@ -109,20 +121,44 @@
     footer a{ color:var(--accent); text-decoration:none; }
     footer a.muted{ color:var(--muted); }
     footer .btn{ display:inline-block; }
+
+    /* bloque de anuncio dentro del flujo */
+    .ad-wrap{ margin:16px 0 8px; }
   </style>
 
   <!-- ===== SEO: JSON-LD ===== -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "SoftwareApplication",
-    "name": "PasswordMX",
-    "applicationCategory": "SecurityApplication",
-    "operatingSystem": "Web",
-    "description": "Generador de contraseñas y passphrases 100% local, sin guardar datos.",
-    "url": "https://passwordmx.online",
-    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-    "author": { "@type": "Organization", "name": "PasswordMX" }
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "name": "PasswordMX",
+        "url": "https://passwordmx.online",
+        "inLanguage": "es",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://www.google.com/search?q=site:passwordmx.online+{search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "ImageObject",
+        "url": "https://passwordmx.online/og-image.png",
+        "width": 1200,
+        "height": 630
+      },
+      {
+        "@type": "SoftwareApplication",
+        "name": "PasswordMX",
+        "applicationCategory": "SecurityApplication",
+        "operatingSystem": "Web",
+        "description": "Generador de contraseñas y passphrases 100% local, sin guardar datos.",
+        "url": "https://passwordmx.online",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "author": { "@type": "Organization", "name": "PasswordMX" }
+      }
+    ]
   }
   </script>
 
@@ -149,6 +185,19 @@
         </div>
         <button id="regen" class="btn ghost" title="Regenerar">↻ Regenerar</button>
       </div>
+
+      <!-- Bloque de anuncio responsivo (manual) -->
+      <div class="ad-wrap">
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX"
+             data-ad-slot="1234567890"
+             data-ad-format="auto"
+             data-full-width-responsive="true"></ins>
+      </div>
+      <script>
+        (adsbygoogle = window.adsbygoogle || []).push({});
+      </script>
 
       <!-- Contraseña -->
       <div id="pane-password">
@@ -227,6 +276,7 @@
       <div class="links">
         <a class="muted" href="/faq.html">FAQ</a>
         <a class="muted" href="/privacy.html">Privacidad</a>
+        <a class="muted" href="/contacto.html">Contacto</a>
         <a class="btn" href="https://www.buymeacoffee.com/arkashghrollo" target="_blank" rel="noopener">Invítame un café ☕</a>
         <button id="shareBtn" class="btn ghost">Compartir</button>
       </div>
@@ -311,8 +361,8 @@
         parts.push(w);
       }
       let out = parts.join(sep);
-      if(addNum) out += (sep === " " ? "" : "") + String(randBytes(1)[0] % 100);
-      if(addSym) out += (sep === " " ? "" : "") + symPool[randBytes(1)[0] % symPool.length];
+      if(addNum) out += String(randBytes(1)[0] % 100);
+      if(addSym) out += symPool[randBytes(1)[0] % symPool.length];
       return out;
     }
 
@@ -335,7 +385,6 @@
       if(mode === "password"){
         const pwd = genPassword();
         out.textContent = pwd;
-        // fuerza
         if(typeof zxcvbn === "function"){
           const z = zxcvbn(pwd);
           const pct = Math.min(100, (z.score+1)*20 + Math.min(60, (z.guesses_log10||0)*2));
@@ -354,7 +403,6 @@
       lenVal.textContent = lenEl.value;
     }
 
-    // eventos
     document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', update));
     document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
@@ -379,7 +427,6 @@
     copyBtn.addEventListener('click', () => copyText(out.textContent, copyBtn));
     copyBtnPP.addEventListener('click', () => copyText(outPP.textContent, copyBtnPP));
 
-    // primera render
     update();
   </script>
 </body>
