@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Contacto — PasswordMX</title>
+  <meta name="description" content="Escríbenos para sugerencias o reportes sobre PasswordMX." />
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="canonical" href="https://passwordmx.online/contacto.html" />
+  <meta property="og:title" content="Contacto — PasswordMX" />
+  <meta property="og:description" content="Escríbenos para sugerencias o reportes sobre PasswordMX." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://passwordmx.online/contacto.html" />
+  <meta property="og:image" content="https://passwordmx.online/og-image.png" />
+  <style>
+    :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; }
+    body{ margin:0; font:16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Inter; background:var(--bg); color:var(--text); }
+    main{ max-width:760px; margin:0 auto; padding:28px 18px; }
+    .card{ background:var(--card); border-radius:14px; padding:20px; box-shadow:0 10px 30px rgba(0,0,0,.25); }
+    h1{ margin:8px 0 14px; color:var(--accent) }
+    .muted{ color:var(--muted) }
+    label{ display:block; margin:10px 0 6px; }
+    input, textarea{ width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(148,163,184,.25); background:#0b1220; color:#e2e8f0; }
+    textarea{ min-height:120px; resize:vertical; }
+    .row{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
+    .btn{ border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer; background:linear-gradient(135deg,#38bdf8,#22d3ee); color:#031525; }
+    a{ color:#38bdf8; text-decoration:none; }
+    footer{ text-align:center; margin-top:20px; color:var(--muted); }
+  </style>
+
+  <!-- JSON-LD ContactPage -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contacto — PasswordMX",
+    "url": "https://passwordmx.online/contacto.html",
+    "about": { "@type": "SoftwareApplication", "name": "PasswordMX" },
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "PasswordMX",
+      "url": "https://passwordmx.online",
+      "contactPoint": [{
+        "@type": "ContactPoint",
+        "contactType": "support",
+        "availableLanguage": ["es","en"],
+        "email": "soporte@passwordmx.online"
+      }]
+    }
+  }
+  </script>
+</head>
+<body>
+  <main>
+    <h1>Contacto</h1>
+    <p class="muted">¿Tienes una sugerencia, encontraste un bug o quieres colaborar? Escríbenos.</p>
+
+    <div class="card" style="margin-top:12px">
+      <form id="contact" action="mailto:soporte@passwordmx.online" method="post" enctype="text/plain">
+        <label>Nombre</label>
+        <input name="nombre" placeholder="Tu nombre" required />
+        <label>Correo</label>
+        <input name="email" type="email" placeholder="tucorreo@ejemplo.com" required />
+        <label>Mensaje</label>
+        <textarea name="mensaje" placeholder="Cuéntanos..." required></textarea>
+        <div class="row" style="margin-top:10px">
+          <button class="btn" type="submit">Enviar por email</button>
+          <button class="btn" type="button" id="copyMail">Copiar correo</button>
+          <a href="/" class="muted">← Volver</a>
+        </div>
+      </form>
+      <p class="muted" style="margin-top:12px;font-size:13px">
+        * Este formulario abre tu cliente de correo. Si prefieres, escríbenos directo a <a id="mailto" href="mailto:soporte@passwordmx.online">soporte@passwordmx.online</a>.
+      </p>
+    </div>
+
+    <footer>© 2025 PasswordMX</footer>
+  </main>
+
+  <script>
+    document.getElementById('copyMail').addEventListener('click', async () => {
+      try{
+        await navigator.clipboard.writeText('soporte@passwordmx.online');
+        alert('Correo copiado: soporte@passwordmx.online');
+      }catch(e){}
+    });
+  </script>
+</body>
+</html>
