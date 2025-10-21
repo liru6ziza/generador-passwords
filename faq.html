@@ -1,59 +1,97 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FAQ | PasswordMX</title>
-  <meta name="description" content="Preguntas frecuentes de PasswordMX: cómo generamos contraseñas, privacidad y uso.">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0f172a">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FAQ — PasswordMX</title>
+  <meta name="description" content="Resuelve dudas comunes sobre PasswordMX: cómo se generan las contraseñas, privacidad, modo offline y más." />
+  <link rel="canonical" href="https://passwordmx.online/faq.html" />
+
+  <!-- OG/Twitter -->
+  <meta property="og:title" content="FAQ — PasswordMX" />
+  <meta property="og:description" content="Resuelve dudas comunes sobre PasswordMX: generación local, privacidad y modo offline." />
+  <meta property="og:url" content="https://passwordmx.online/faq.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://passwordmx.online/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- AdSense + Plausible -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014920114807705" crossorigin="anonymous"></script>
+  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
+
   <style>
-    :root{ --bg:#0f172a; --card:#111827; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto}
-    .wrap{max-width:900px;margin:auto;padding:28px}
-    a{color:var(--accent)}
-    .card{background:var(--card);border-radius:14px;padding:18px;margin:12px 0}
-    h1{margin:0 0 12px;color:var(--accent)}
-    h2{margin:12px 0}
-    .muted{color:var(--muted)}
-    nav{display:flex;gap:14px;margin-bottom:12px}
-    nav a{color:var(--muted);text-decoration:none}
-    nav a:hover{color:var(--text)}
-    footer{color:var(--muted);text-align:center;margin-top:24px;font-size:13px}
+    :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; }
+    @media (prefers-color-scheme: light){ :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; } }
+    body{ margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:900px; margin:32px auto; padding:0 16px; }
+    .card{ background:var(--card); border-radius:14px; padding:20px; }
+    h1{ color:var(--accent); margin:0 0 12px; }
+    h2{ margin:18px 0 6px; }
+    a{ color:var(--accent); text-decoration:none; }
+    .muted{ color:var(--muted); }
+    footer{ text-align:center; color:var(--muted); margin:22px 0; }
+    nav{ margin:10px 0 18px; }
+    nav a{ margin-right:12px; }
   </style>
+
+  <!-- JSON-LD FAQPage -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"FAQPage",
+    "mainEntity":[
+      {
+        "@type":"Question",
+        "name":"¿Las contraseñas se generan 100% localmente?",
+        "acceptedAnswer":{"@type":"Answer","text":"Sí. Se generan en tu navegador usando crypto.getRandomValues(). No se envían ni almacenan en servidores."}
+      },
+      {
+        "@type":"Question",
+        "name":"¿Guardan o comparten mis contraseñas?",
+        "acceptedAnswer":{"@type":"Answer","text":"No. PasswordMX no guarda, no comparte y no registra tus contraseñas. El uso es bajo tu propia responsabilidad."}
+      },
+      {
+        "@type":"Question",
+        "name":"¿Puedo usar la app sin conexión?",
+        "acceptedAnswer":{"@type":"Answer","text":"Sí. El sitio funciona offline gracias a un Service Worker. La primera visita debe ser online para instalar los archivos."}
+      },
+      {
+        "@type":"Question",
+        "name":"¿Qué mide el indicador de fuerza (zxcvbn)?",
+        "acceptedAnswer":{"@type":"Answer","text":"Estimaciones de dificultad de crackeo con patrones comunes. Es orientativo: usa longitudes altas y mezcla de tipos de caracteres."}
+      }
+    ]
+  }
+  </script>
 </head>
 <body>
   <div class="wrap">
     <nav>
-      <a href="/">← Volver</a>
+      <a href="/" aria-label="Ir al inicio">← Inicio</a>
       <a href="/privacy.html">Privacidad</a>
+      <a href="/contacto.html">Contacto</a>
     </nav>
-    <h1>Preguntas frecuentes</h1>
 
     <div class="card">
-      <h2>¿Se guardan o envían mis contraseñas?</h2>
-      <p>No. Todo se genera localmente en tu navegador usando <code>crypto.getRandomValues()</code>. No tenemos servidores que reciban nada.</p>
+      <h1>FAQ</h1>
+
+      <h2>¿Las contraseñas se generan 100% localmente?</h2>
+      <p class="muted">Sí. Se generan en tu navegador usando <code>crypto.getRandomValues()</code>. No se envían ni almacenan en servidores.</p>
+
+      <h2>¿Guardan o comparten mis contraseñas?</h2>
+      <p class="muted">No. PasswordMX no guarda, comparte ni registra tus contraseñas. Te recomendamos usar un gestor (Bitwarden, 1Password, etc.).</p>
+
+      <h2>¿Puedo usar la app sin conexión?</h2>
+      <p class="muted">Sí. Tras la primera visita online, el Service Worker permite usarla sin conexión en <a href="/offline.html">/offline.html</a>.</p>
+
+      <h2>¿Qué mide el indicador de fuerza (zxcvbn)?</h2>
+      <p class="muted">Es una estimación de dificultad de crackeo basada en patrones. Consejo: usa longitudes altas y mezcla de tipos de caracteres.</p>
+
+      <h2>Necesito ayuda / reportar un bug</h2>
+      <p class="muted">Escríbenos en <a href="/contacto.html">Contacto</a>.</p>
     </div>
 
-    <div class="card">
-      <h2>¿Cómo se mide la “fuerza”?</h2>
-      <p>Usamos <code>zxcvbn</code> para estimar la dificultad de crackeo. Es una guía, no una garantía absoluta.</p>
-    </div>
-
-    <div class="card">
-      <h2>¿Puedo usar frases de palabras?</h2>
-      <p>Sí. Activa el modo “Passphrase” en la página principal y elige número de palabras, separador y extras.</p>
-    </div>
-
-    <div class="card">
-      <h2>¿Cómo apoyan el proyecto?</h2>
-      <p>Puedes invitar un café ☕ o dejar propina:</p>
-      <p><a class="btn" href="https://www.buymeacoffee.com/TU_USER" target="_blank" rel="noopener">Invítame un café</a></p>
-      <p class="muted">También mostramos anuncios discretos para cubrir costos del dominio y mantener el proyecto gratuito.</p>
-    </div>
-
-    <footer>© 2025 PasswordMX</footer>
+    <footer>© 2025 PasswordMX — Hecho con 💙 en México.</footer>
   </div>
 </body>
 </html>
