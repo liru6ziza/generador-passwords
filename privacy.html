@@ -1,43 +1,79 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Política de Privacidad | PasswordMX</title>
-  <meta name="description" content="Política de privacidad de PasswordMX.">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <meta name="theme-color" content="#0f172a">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Política de Privacidad — PasswordMX</title>
+  <meta name="description" content="Política de privacidad de PasswordMX: generación local, sin almacenamiento de contraseñas ni rastreo invasivo." />
+  <link rel="canonical" href="https://passwordmx.online/privacy.html" />
+
+  <!-- OG/Twitter -->
+  <meta property="og:title" content="Política de Privacidad — PasswordMX" />
+  <meta property="og:description" content="Conoce cómo tratamos tus datos: no guardamos contraseñas y usamos analítica sin cookies." />
+  <meta property="og:url" content="https://passwordmx.online/privacy.html" />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://passwordmx.online/og-image.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <!-- AdSense + Plausible -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014920114807705" crossorigin="anonymous"></script>
+  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
+
   <style>
-    :root{ --bg:#0f172a; --card:#111827; --text:#e2e8f0; --muted:#94a3b8; --accent:#38bdf8;}
-    body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto}
-    .wrap{max-width:900px;margin:auto;padding:28px}
-    a{color:var(--accent)}
-    .card{background:var(--card);border-radius:14px;padding:18px;margin:12px 0}
-    h1{margin:0 0 12px;color:var(--accent)}
-    .muted{color:var(--muted)}
-    nav{display:flex;gap:14px;margin-bottom:12px}
-    nav a{color:var(--muted);text-decoration:none}
-    nav a:hover{color:var(--text)}
-    footer{color:var(--muted);text-align:center;margin-top:24px;font-size:13px}
+    :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; }
+    @media (prefers-color-scheme: light){ :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; } }
+    body{ margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; background:var(--bg); color:var(--text); }
+    .wrap{ max-width:900px; margin:32px auto; padding:0 16px; }
+    .card{ background:var(--card); border-radius:14px; padding:20px; }
+    h1{ color:var(--accent); margin:0 0 12px; }
+    a{ color:var(--accent); text-decoration:none; }
+    .muted{ color:var(--muted); }
+    footer{ text-align:center; color:var(--muted); margin:22px 0; }
+    nav{ margin:10px 0 18px; }
+    nav a{ margin-right:12px; }
   </style>
+
+  <!-- JSON-LD WebPage -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"WebPage",
+    "name":"Política de Privacidad — PasswordMX",
+    "url":"https://passwordmx.online/privacy.html",
+    "inLanguage":"es",
+    "about":{"@type":"Thing","name":"Privacidad en generador de contraseñas"}
+  }
+  </script>
 </head>
 <body>
   <div class="wrap">
     <nav>
-      <a href="/">← Volver</a>
+      <a href="/">← Inicio</a>
       <a href="/faq.html">FAQ</a>
+      <a href="/contacto.html">Contacto</a>
     </nav>
-    <h1>Política de Privacidad</h1>
 
     <div class="card">
-      <p><strong>Generación local:</strong> PasswordMX genera contraseñas y passphrases en tu navegador. No enviamos ni almacenamos tu contenido.</p>
-      <p><strong>Cookies y analítica:</strong> Podemos usar analítica sin cookies (por ejemplo, Plausible) para métricas anónimas. Si activas anuncios de terceros (AdSense), estos pueden usar cookies para personalización. Puedes optar por no personalizar desde el banner de consentimiento.</p>
-      <p><strong>Contacto:</strong> Para dudas o solicitudes, escríbenos a <a href="mailto:contacto@passwordmx.online">contacto@passwordmx.online</a>.</p>
-      <p class="muted">Última actualización: 2025-10-13</p>
+      <h1>Política de Privacidad</h1>
+      <p class="muted"><strong>Última actualización:</strong> 2025-10-20</p>
+
+      <h2>1) Generación local</h2>
+      <p>Las contraseñas y passphrases se generan en tu navegador con APIs criptográficas del propio dispositivo (<code>crypto.getRandomValues()</code>). No se envían al servidor ni se guardan en bases de datos.</p>
+
+      <h2>2) Analítica sin cookies</h2>
+      <p>Usamos <em>Plausible</em> para medir visitas de forma anónima y sin cookies. Nos ayuda a entender uso global (por ejemplo, páginas vistas o países agregados). No se crean perfiles individuales.</p>
+
+      <h2>3) Archivos locales y modo offline</h2>
+      <p>Utilizamos un Service Worker para ofrecer modo sin conexión. Los archivos estáticos se almacenan en tu caché del navegador y puedes borrarlos cuando quieras desde la configuración del navegador.</p>
+
+      <h2>4) Enlaces y contenido de terceros</h2>
+      <p>Algunos enlaces (por ejemplo, BuyMeACoffee) te llevan a webs de terceros con sus propias políticas.</p>
+
+      <h2>5) Contacto</h2>
+      <p>Escríbenos en <a href="/contacto.html">Contacto</a>. Si prefieres correo directo: <a href="mailto:soporte@passwordmx.online">soporte@passwordmx.online</a></p>
     </div>
 
-    <footer>© 2025 PasswordMX</footer>
+    <footer>© 2025 PasswordMX — Hecho con 💙 en México.</footer>
   </div>
 </body>
 </html>
