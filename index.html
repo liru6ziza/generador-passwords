@@ -15,48 +15,34 @@
   <meta property="og:url" content="https://passwordmx.online" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://passwordmx.online/og-image.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="PasswordMX — Generador de Contraseñas Seguras" />
   <meta name="twitter:description" content="Crea contraseñas fuertes y passphrases en tu navegador." />
   <meta name="twitter:image" content="https://passwordmx.online/og-image.png" />
-  <meta name="twitter:image:alt" content="PasswordMX: Generador de contraseñas y passphrases 100% local" />
   <link rel="canonical" href="https://passwordmx.online" />
-  <link rel="preload" href="/og-image.png" as="image" imagesrcset="/og-image.png 1x" />
 
-  <!-- ===== Favicon / Icons ===== -->
-  <link rel="icon" type="image/png" href="favicon.png" />
-  <!-- fallback SVG minimal por si falta el PNG -->
-  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 40 40"><rect rx="6" width="24" height="24" fill="%231e293b"/><path d="M6 11v-2a6 6 0 1112 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7a1 1 0 011-1h1zm2 0h8v-2a4 4 0 10-8 0v2z" fill="%23fff"/></svg>' />
-  <!-- iOS -->
-  <link rel="apple-touch-icon" href="favicon.png" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-
-  <!-- ===== ✅ PWA ===== -->
-  <link rel="manifest" href="manifest.webmanifest" />
+  <!-- ===== PWA / Icons ===== -->
+  <link rel="manifest" href="/manifest.webmanifest" />
   <meta name="theme-color" content="#0f172a" />
-  <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/service-worker.js')
-          .then(() => console.log('✅ Service Worker registrado'))
-          .catch(err => console.log('❌ Error registrando SW:', err));
-      });
-    }
-  </script>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="apple-touch-icon" href="/icon-192.png" />
+  <!-- Fallback SVG si faltara el PNG -->
+  <link rel="icon" href='data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="-8 -8 40 40"><rect rx="6" width="24" height="24" fill="%231e293b"/><path d="M6 11v-2a6 6 0 1112 0v2h1a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1v-7a1 1 0 011-1h1zm2 0h8v-2a4 4 0 10-8 0v2z" fill="%23fff"/></svg>' />
 
-  <!-- ===== AdSense (reemplaza por tu ID) ===== -->
-  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX"
-          crossorigin="anonymous"></script>
-  <!-- Auto ads opcional: descomenta cuando lo actives en AdSense
+  <!-- ===== AdSense (deja tu ca-pub correcto) ===== -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXX" crossorigin="anonymous"></script>
+
+  <!-- (Opcional) Auto Ads si luego lo activas en AdSense
   <script>
     (adsbygoogle = window.adsbygoogle || []).push({
-      google_ad_client: "ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX",
+      google_ad_client: "ca-pub-XXXXXXXXXXXXXXX",
       enable_page_level_ads: true
     });
   </script> -->
+
+  <!-- ===== Plausible (verificación/analytics sin cookies) ===== -->
+  <!-- Usa el snippet oficial data-domain (simple y estable). Si tu onboarding te dio un pa-XXXX.js, puedes sustituirlo aquí. -->
+  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
 
   <!-- ===== Estilos ===== -->
   <style>
@@ -66,12 +52,8 @@
       --shadow:0 10px 30px rgba(0,0,0,.25);
     }
     @media (prefers-color-scheme: light){
-      :root{
-        --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a;
-        --accent:#0284c7; --accent-2:#06b6d4; --shadow:0 10px 24px rgba(2,8,23,.08);
-      }
+      :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; --accent-2:#06b6d4; --shadow:0 10px 24px rgba(2,8,23,.08); }
     }
-
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
@@ -101,12 +83,12 @@
     @media (prefers-color-scheme: light){ .out{ background:#f1f5f9; } }
     .out code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:18px; }
 
-    .btn{
-      border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer;
+    .btn{ border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer;
       background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#031525;
       transition:transform .02s ease-in-out, opacity .2s;
     }
     .btn:active{ transform: translateY(1px); }
+    .btn.secondary{ background:#0ea5e9; color:#07263a }
     .btn.ghost{ background:transparent; border:2px solid rgba(148,163,184,.3); color:var(--text); }
 
     .meter{ height:10px; border-radius:999px; background:rgba(148,163,184,.25); overflow:hidden; }
@@ -121,49 +103,35 @@
     footer a{ color:var(--accent); text-decoration:none; }
     footer a.muted{ color:var(--muted); }
     footer .btn{ display:inline-block; }
-
-    /* bloque de anuncio dentro del flujo */
-    .ad-wrap{ margin:16px 0 8px; }
   </style>
-
-  <!-- ===== SEO: JSON-LD ===== -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "name": "PasswordMX",
-        "url": "https://passwordmx.online",
-        "inLanguage": "es",
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": "https://www.google.com/search?q=site:passwordmx.online+{search_term_string}",
-          "query-input": "required name=search_term_string"
-        }
-      },
-      {
-        "@type": "ImageObject",
-        "url": "https://passwordmx.online/og-image.png",
-        "width": 1200,
-        "height": 630
-      },
-      {
-        "@type": "SoftwareApplication",
-        "name": "PasswordMX",
-        "applicationCategory": "SecurityApplication",
-        "operatingSystem": "Web",
-        "description": "Generador de contraseñas y passphrases 100% local, sin guardar datos.",
-        "url": "https://passwordmx.online",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "author": { "@type": "Organization", "name": "PasswordMX" }
-      }
-    ]
-  }
-  </script>
 
   <!-- zxcvbn (medidor de fuerza) -->
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/zxcvbn/4.4.2/zxcvbn.js"></script>
+
+  <!-- ===== Structured Data (SEO) ===== -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "PasswordMX",
+    "url": "https://passwordmx.online/",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://passwordmx.online/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "PasswordMX",
+    "url": "https://passwordmx.online/",
+    "logo": "https://passwordmx.online/og-image.png",
+    "sameAs": ["https://github.com/liru6ziza/generador-passwords"]
+  }
+  </script>
 </head>
 
 <body>
@@ -186,19 +154,6 @@
         <button id="regen" class="btn ghost" title="Regenerar">↻ Regenerar</button>
       </div>
 
-      <!-- Bloque de anuncio responsivo (manual) -->
-      <div class="ad-wrap">
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-XXXXXXXXXXXXXXXXXXXXXXXX"
-             data-ad-slot="1234567890"
-             data-ad-format="auto"
-             data-full-width-responsive="true"></ins>
-      </div>
-      <script>
-        (adsbygoogle = window.adsbygoogle || []).push({});
-      </script>
-
       <!-- Contraseña -->
       <div id="pane-password">
         <div class="range">
@@ -214,13 +169,13 @@
           <label><input id="optL" type="checkbox" checked> Minúsculas</label>
           <label><input id="optN" type="checkbox" checked> Números</label>
           <label><input id="optS" type="checkbox"> Símbolos</label>
-          <label><input id="optEasy" type="checkbox"> Fácil de leer (sin O/0, I/1)</label>
+          <label><input id="optEasy" type="checkbox" checked> Fácil de leer (sin O/0, l/1)</label>
           <label><input id="optNoRep" type="checkbox"> Evitar repetidos</label>
         </div>
 
         <div class="out">
           <code id="out"></code>
-          <button id="copyBtn" class="btn">Copiar</button>
+          <button id="copyBtn" class="btn secondary">Copiar</button>
         </div>
 
         <div class="row" style="align-items:center; gap:12px; margin-top:8px">
@@ -244,6 +199,7 @@
               <option value="_">_</option>
               <option value=" ">espacio</option>
               <option value=".">.</option>
+              <option value="+">+</option>
             </select>
           </label>
           <label><input id="ppCap" type="checkbox"> Capitalizar</label>
@@ -272,32 +228,37 @@
     </aside>
 
     <footer>
-      © 2025 PasswordMX — Hecho con 💙 en México.
+      © <span id="year"></span> PasswordMX — Hecho con 🛡️ en México.
       <div class="links">
         <a class="muted" href="/faq.html">FAQ</a>
         <a class="muted" href="/privacy.html">Privacidad</a>
         <a class="muted" href="/contacto.html">Contacto</a>
         <a class="btn" href="https://www.buymeacoffee.com/arkashghrollo" target="_blank" rel="noopener">Invítame un café ☕</a>
-        <button id="shareBtn" class="btn ghost">Compartir</button>
       </div>
     </footer>
   </main>
 
-  <!-- ===== Botón Compartir ===== -->
+  <!-- ===== Service Worker: registro + actualización más frecuente ===== -->
   <script>
-    (function(){
-      const btn = document.getElementById('shareBtn');
-      const url = 'https://passwordmx.online/?utm_source=share&utm_medium=button&utm_campaign=app';
-      btn?.addEventListener('click', async () => {
-        const data = { title: 'PasswordMX', text: 'Genera contraseñas seguras y passphrases (100% local).', url };
-        if (navigator.share) {
-          try { await navigator.share(data); } catch(e){}
-        } else {
-          await navigator.clipboard.writeText(url);
-          btn.textContent = '¡Link copiado!'; setTimeout(()=>btn.textContent='Compartir',900);
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/service-worker.js', { updateViaCache: 'all' })
+          .then(reg => {
+            // Forzar un check de actualización al cargar
+            reg.update?.();
+            // Y volver a checar cada 60 minutos
+            setInterval(() => reg.update?.(), 60 * 60 * 1000);
+            console.log('✅ Service Worker registrado');
+          })
+          .catch(err => console.log('❌ Error registrando SW:', err));
+      });
+      // Cuando la pestaña vuelve a primer plano, intenta actualizar
+      document.addEventListener('visibilitychange', () => {
+        if (document.visibilityState === 'visible') {
+          navigator.serviceWorker.getRegistration().then(r => r?.update?.());
         }
       });
-    })();
+    }
   </script>
 
   <!-- ===== Lógica ===== -->
@@ -306,10 +267,33 @@
     const randBytes = (n) => crypto.getRandomValues(new Uint8Array(n));
 
     // ------- contraseña -------
-    const UPP = "ABCDEFGHJKLMNPQRSTUVWXYZ";
-    const LOW = "abcdefghijkmnopqrstuvwxyz";
-    const NUM = "0123456789";
+    const UPP_ALL = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const LOW_ALL = "abcdefghijklmnopqrstuvwxyz";
+    const NUM_ALL = "0123456789";
     const SYM = "!@#$%^&*()_+-=[]{};:,.?/";
+
+    const UPP = "ABCDEFGHJKLMNPQRSTUVWXYZ";   // sin I/O
+    const LOW = "abcdefghijkmnopqrstuvwxyz";  // sin l
+    const NUM = "23456789";                   // sin 0/1
+
+    function pick(pool, n=1){
+      const out = [];
+      const m = pool.length;
+      const bytes = randBytes(n * 2);
+      let j = 0, lim = Math.floor(256/m)*m;
+      for (let i=0; i<n; i++){
+        let x;
+        do { x = bytes[j++]; if (j>=bytes.length){ j=0; bytes.set(randBytes(bytes.length)); } }
+        while (x >= lim);
+        out.push( pool[x % m] );
+      }
+      return out.join('');
+    }
+    function shuffle(s){
+      const a = s.split(''), b = randBytes(a.length);
+      return a.map((ch,i)=>({ch, r:b[i]})).sort((x,y)=>x.r-y.r).map(o=>o.ch).join('');
+    }
+    function uniqueize(s){ const used=new Set(); let out=""; for(const c of s){ if(!used.has(c)){ used.add(c); out+=c; } } return out; }
 
     function genPassword(){
       const len = +document.getElementById('len').value;
@@ -320,32 +304,46 @@
       const easy = document.getElementById('optEasy').checked;
       const noRep = document.getElementById('optNoRep').checked;
 
-      let pool = "";
-      if(useU) pool += UPP;
-      if(useL) pool += LOW;
-      if(useN) pool += NUM;
-      if(useS) pool += SYM;
-      if(!pool) pool = LOW;
+      const U = easy ? UPP : UPP_ALL;
+      const L = easy ? LOW : LOW_ALL;
+      const D = easy ? NUM : NUM_ALL;
 
-      let out = "";
-      let last = "";
-      for(let i=0; i<len; i++){
-        let ch = pool[randBytes(1)[0] % pool.length];
-        if(easy){
-          if("O0".includes(ch)) { i--; continue; }
-          if("Il1".includes(ch)) { i--; continue; }
-        }
-        if(noRep && ch === last){ i--; continue; }
-        out += ch; last = ch;
+      let pool = "";
+      if(useU) pool += U;
+      if(useL) pool += L;
+      if(useN) pool += D;
+      if(useS) pool += SYM;
+      if(!pool) return "Selecciona al menos un tipo.";
+
+      // Garantiza 1 de cada tipo seleccionado
+      let base = "";
+      if(useU) base += pick(U,1);
+      if(useL) base += pick(L,1);
+      if(useN) base += pick(D,1);
+      if(useS) base += pick(SYM,1);
+
+      let rest = Math.max(len - base.length, 0);
+      let out = shuffle(base + pick(pool, rest));
+
+      if(noRep){
+        const nr = uniqueize(out);
+        if(nr.length < len){
+          const poolNR = uniqueize(pool);
+          let need = len - nr.length, extra="";
+          while(need-- > 0){
+            let c; do { c = pick(poolNR,1); } while(nr.includes(c) || extra.includes(c));
+            extra += c;
+          }
+          out = shuffle(nr + extra);
+        } else out = nr;
       }
       return out;
     }
 
     // ------- passphrase -------
-    const WORDS = [
-      "cielo","luz","río","fuego","nube","sol","luna","piedra","bosque","trueno",
-      "viento","tigre","duna","nieve","cáliz","nexo","marea","eco","nodo","cabal"
-    ];
+    const WORDS = ("sol luna rio monte nube pez roca llama trébol valle kiwi jaguar oro plata cobre coral salsa ritmo verso trama tinta dardo astro vela delta fénix orquídea zorro bosque trueno brisa loto marea faro polo norte sur este oeste mapa ruta viaje arena rayo vector pixel neón vapor eco rito viento fiesta truco pacto nave turbo onda alfa beta gamma zen jade ónix rubí ágata quetzal cactus nopal maíz tequila mezcal águila"
+    +" apple berry cherry mango lemon ocean river stone fire cloud frost blaze comet orbit nova quark tide wave drift peak summit echo pulse sonic cyber quantum nebula ion byte ninja panda koala tiger falcon eagle raven fox wolf").split(/\s+/);
+
     function genPassphrase(){
       const n = Math.max(3, Math.min(12, +document.getElementById('ppCount').value || 4));
       const sep = document.getElementById('ppSep').value;
@@ -361,13 +359,13 @@
         parts.push(w);
       }
       let out = parts.join(sep);
-      if(addNum) out += String(randBytes(1)[0] % 100);
-      if(addSym) out += symPool[randBytes(1)[0] % symPool.length];
+      if(addNum) out += (sep === " " ? "" : "") + String(randBytes(1)[0] % 100);
+      if(addSym) out += (sep === " " ? "" : "") + symPool[randBytes(1)[0] % symPool.length];
       return out;
     }
 
     // ------- UI / estado -------
-    const out = document.getElementById('out');
+    const outEl = document.getElementById('out');
     const outPP = document.getElementById('outPP');
     const meter = document.getElementById('meter');
     const scoreTxt = document.getElementById('scoreTxt');
@@ -379,12 +377,13 @@
     const panePwd = document.getElementById('pane-password');
     const panePP  = document.getElementById('pane-passphrase');
     const regen = document.getElementById('regen');
+    document.getElementById('year').textContent = new Date().getFullYear();
 
     function update(){
       const mode = document.querySelector('input[name="mode"]:checked').value;
       if(mode === "password"){
         const pwd = genPassword();
-        out.textContent = pwd;
+        outEl.textContent = pwd;
         if(typeof zxcvbn === "function"){
           const z = zxcvbn(pwd);
           const pct = Math.min(100, (z.score+1)*20 + Math.min(60, (z.guesses_log10||0)*2));
@@ -403,6 +402,7 @@
       lenVal.textContent = lenEl.value;
     }
 
+    // eventos
     document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', update));
     document.querySelectorAll('input[name="mode"]').forEach(r => r.addEventListener('change', () => {
       const mode = document.querySelector('input[name="mode"]:checked').value;
@@ -424,9 +424,10 @@
       }
       setTimeout(()=> btn.textContent = "Copiar", 900);
     }
-    copyBtn.addEventListener('click', () => copyText(out.textContent, copyBtn));
+    copyBtn.addEventListener('click', () => copyText(outEl.textContent, copyBtn));
     copyBtnPP.addEventListener('click', () => copyText(outPP.textContent, copyBtnPP));
 
+    // primera render
     update();
   </script>
 </body>
