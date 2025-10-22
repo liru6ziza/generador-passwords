@@ -44,16 +44,19 @@
     }
   </script>
 
-  <!-- ===== Google AdSense (verificación) ===== -->
+  <!-- ===== Google AdSense ===== -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014920114807705" crossorigin="anonymous"></script>
+  <script>
+    // Activa Auto Ads (además de habilitarlo en AdSense UI)
+    (window.adsbygoogle = window.adsbygoogle || []).push({
+      google_ad_client: "ca-pub-8014920114807705",
+      enable_page_level_ads: true
+    });
+  </script>
 
   <!-- ===== Plausible (analytics sin cookies) ===== -->
-  <!-- Usa el snippet con tu clave pa-… tal como lo entrega Plausible -->
-  <script async src="https://plausible.io/js/pa-Cj4CH7YlcH4ZwDMnhAr.js"></script>
-  <script>
-    window.plausible = window.plausible || function(){(plausible.q = plausible.q || []).push(arguments)};
-    plausible.init ? plausible.init() : (plausible.o = || {});
-  </script>
+  <!-- Snippet recomendado por Plausible: sin cookies, cumple RGPD y es bloqueable por adblockers (normal). -->
+  <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
 
   <!-- ===== Estilos ===== -->
   <style>
@@ -72,35 +75,69 @@
       background: radial-gradient(1200px 600px at 50% -10%, rgba(56,189,248,.15), transparent 70%), var(--bg);
       color:var(--text); display:flex; align-items:center; justify-content:center; padding:24px;
     }
+
+    /* ===== Topbar móvil ===== */
+    .topbar{
+      display:none;
+    }
+    @media (max-width:880px){
+      .topbar{
+        position:sticky; top:0; z-index:50;
+        display:flex; align-items:center; justify-content:center;
+        height:48px; padding:0 12px;
+        background:rgba(2,8,23,.7); backdrop-filter: blur(8px);
+        color:var(--text); font-weight:700; letter-spacing:.2px;
+        border-radius:12px; margin-bottom:12px;
+      }
+      .topbar .badge{ margin-left:6px; }
+      body{ padding:12px; }
+    }
+
     .container{ width:100%; max-width:900px; display:grid; gap:18px; grid-template-columns:1.1fr .9fr; align-items:start; }
     @media (max-width:880px){ .container{ grid-template-columns:1fr; } }
+
     header{ grid-column:1/-1; text-align:center; margin-bottom:6px; }
-    header h1{ margin:0 0 8px; font-size:clamp(24px,4vw,34px); color:var(--accent); }
+    header h1{ margin:0 0 8px; font-size:clamp(22px,4vw,34px); color:var(--accent); }
     header p{ margin:0; color:var(--muted); }
+
     .card{ background:var(--card); border-radius:14px; box-shadow:var(--shadow); padding:18px; }
     .controls label{ display:flex; align-items:center; gap:10px; margin:8px 0; color:var(--text); }
     .row{ display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
     .muted{ color:var(--muted); font-size:14px; }
+
     .range{ display:grid; gap:6px; }
     input[type="range"]{ width:100%; }
-    .out{ display:flex; align-items:center; gap:10px; margin-top:8px; background:#1f2937; border-radius:10px; padding:10px 12px; overflow:auto; white-space:nowrap; }
+
+    .out{
+      display:flex; align-items:center; gap:10px; margin-top:8px; background:#1f2937;
+      border-radius:10px; padding:10px 12px; overflow:auto; white-space:nowrap;
+    }
     @media (prefers-color-scheme: light){ .out{ background:#f1f5f9; } }
     .out code{ font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace; font-size:18px; }
+
     .btn{ border:0; border-radius:10px; padding:10px 14px; font-weight:600; cursor:pointer;
       background:linear-gradient(135deg, var(--accent), var(--accent-2)); color:#031525; transition:transform .02s ease-in-out, opacity .2s; }
     .btn:active{ transform: translateY(1px); }
     .btn.ghost{ background:transparent; border:2px solid rgba(148,163,184,.3); color:var(--text); }
+
     .meter{ height:10px; border-radius:999px; background:rgba(148,163,184,.25); overflow:hidden; }
     .meter>i{ display:block; height:100%; width:0%; background:linear-gradient(90deg, var(--bad), var(--warn), var(--ok)); transition:width .25s ease; }
     .score{ font-weight:600; }
     .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     .sep{ height:1px; background:rgba(148,163,184,.2); margin:12px 0; }
     .badge{ font-size:12px; color:#0b2a36; background:var(--accent); border-radius:999px; padding:4px 8px; font-weight:700; }
+
     footer{ grid-column:1/-1; text-align:center; color:var(--muted); font-size:13px; }
     footer .links{ display:flex; gap:14px; justify-content:center; align-items:center; flex-wrap:wrap; margin-top:10px; }
     footer a{ color:var(--accent); text-decoration:none; }
     footer a.muted{ color:var(--muted); }
     footer .btn{ display:inline-block; }
+
+    /* Footer más legible en móvil */
+    @media (max-width:640px){
+      footer .links{ flex-direction:column; gap:8px; }
+      footer .btn{ width:100%; max-width:320px; }
+    }
   </style>
 
   <!-- zxcvbn (medidor de fuerza) -->
@@ -126,6 +163,9 @@
 </head>
 
 <body>
+  <!-- Topbar visible sólo en móvil -->
+  <div class="topbar" aria-hidden="true">🔒 Password<span class="badge">MX</span></div>
+
   <main class="container">
     <header>
       <h1>🔒 Password<span class="badge">MX</span> — Generador de Contraseñas y Passphrases</h1>
@@ -215,6 +255,11 @@
       </ul>
       <p class="muted">Recomendamos usar un <em>gestor de contraseñas</em> (Bitwarden, 1Password, etc.).</p>
       <p class="muted" style="font-size:12px">Aviso: no almacenamos ni compartimos tus contraseñas. Uso bajo tu propia responsabilidad.</p>
+
+      <!-- BuyMeACoffee discreto -->
+      <p class="muted" style="margin-top:12px">
+        Si esto te sirvió, <a href="https://www.buymeacoffee.com/arkashghrollo" target="_blank" rel="noopener">invítame un café ☕</a>.
+      </p>
     </aside>
 
     <footer>
@@ -223,8 +268,7 @@
         <a class="muted" href="/faq.html">FAQ</a>
         <a class="muted" href="/privacy.html">Privacidad</a>
         <a class="muted" href="/contacto.html">Contacto</a>
-        <a class="btn" href="https://www.buymeacoffee.com/arkashghrollo" target="_blank" rel="noopener">Invítame un café ☕</a>
-        <button id="shareBtn" class="btn ghost">Compartir</button>
+        <button id="shareBtn" class="btn ghost" aria-label="Compartir sitio">Compartir</button>
       </div>
     </footer>
   </main>
@@ -307,8 +351,8 @@
         parts.push(w);
       }
       let out = parts.join(sep);
-      if(addNum) out += (sep === " " ? "" : "") + String(randBytes(1)[0] % 100);
-      if(addSym) out += (sep === " " ? "" : "") + symPool[randBytes(1)[0] % symPool.length];
+      if(addNum) out += String(randBytes(1)[0] % 100);
+      if(addSym) out += symPool[randBytes(1)[0] % symPool.length];
       return out;
     }
 
