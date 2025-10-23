@@ -3,35 +3,40 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>FAQ — PasswordMX</title>
   <meta name="description" content="Resuelve dudas comunes sobre PasswordMX: cómo se generan las contraseñas, privacidad, modo offline y más." />
   <link rel="canonical" href="https://passwordmx.online/faq.html" />
 
-  <!-- OG/Twitter -->
+  <!-- OG / Twitter -->
   <meta property="og:title" content="FAQ — PasswordMX" />
-  <meta property="og:description" content="Resuelve dudas comunes sobre PasswordMX: generación local, privacidad y modo offline." />
+  <meta property="og:description" content="Resuelve dudas sobre PasswordMX: generación local, privacidad, seguridad y uso offline." />
   <meta property="og:url" content="https://passwordmx.online/faq.html" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://passwordmx.online/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
 
-  <!-- AdSense + Plausible -->
+  <!-- AdSense (tu ID) -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8014920114807705" crossorigin="anonymous"></script>
+
+  <!-- Plausible -->
   <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
 
   <style>
     :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; }
-    @media (prefers-color-scheme: light){ :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; } }
-    body{ margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; background:var(--bg); color:var(--text); }
-    .wrap{ max-width:900px; margin:32px auto; padding:0 16px; }
+    @media (prefers-color-scheme: light){
+      :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; }
+    }
+    html,body{ margin:0; height:100%; background:var(--bg); color:var(--text);
+      font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; }
+    .wrap{ max-width:900px; margin:0 auto; padding:calc(10px + env(safe-area-inset-top)) 16px 24px; }
+    nav{ margin:6px 0 18px; display:flex; gap:14px; flex-wrap:wrap; }
+    nav a{ color:var(--accent); text-decoration:none; }
     .card{ background:var(--card); border-radius:14px; padding:20px; }
-    h1{ color:var(--accent); margin:0 0 12px; }
+    h1{ color:var(--accent); margin:4px 0 12px; }
     h2{ margin:18px 0 6px; }
-    a{ color:var(--accent); text-decoration:none; }
     .muted{ color:var(--muted); }
     footer{ text-align:center; color:var(--muted); margin:22px 0; }
-    nav{ margin:10px 0 18px; }
-    nav a{ margin-right:12px; }
   </style>
 
   <!-- JSON-LD FAQPage -->
@@ -48,17 +53,17 @@
       {
         "@type":"Question",
         "name":"¿Guardan o comparten mis contraseñas?",
-        "acceptedAnswer":{"@type":"Answer","text":"No. PasswordMX no guarda, no comparte y no registra tus contraseñas. El uso es bajo tu propia responsabilidad."}
+        "acceptedAnswer":{"@type":"Answer","text":"No. PasswordMX no guarda, comparte ni registra tus contraseñas. Te recomendamos usar un gestor (Bitwarden, 1Password, etc.)."}
       },
       {
         "@type":"Question",
         "name":"¿Puedo usar la app sin conexión?",
-        "acceptedAnswer":{"@type":"Answer","text":"Sí. El sitio funciona offline gracias a un Service Worker. La primera visita debe ser online para instalar los archivos."}
+        "acceptedAnswer":{"@type":"Answer","text":"Sí. Tras la primera visita online, el Service Worker permite usarla sin conexión desde /offline.html."}
       },
       {
         "@type":"Question",
         "name":"¿Qué mide el indicador de fuerza (zxcvbn)?",
-        "acceptedAnswer":{"@type":"Answer","text":"Estimaciones de dificultad de crackeo con patrones comunes. Es orientativo: usa longitudes altas y mezcla de tipos de caracteres."}
+        "acceptedAnswer":{"@type":"Answer","text":"Es una estimación de dificultad de crackeo basada en patrones comunes. Sugerencia: usa longitudes altas y mezcla de tipos de caracteres."}
       }
     ]
   }
@@ -85,7 +90,7 @@
       <p class="muted">Sí. Tras la primera visita online, el Service Worker permite usarla sin conexión en <a href="/offline.html">/offline.html</a>.</p>
 
       <h2>¿Qué mide el indicador de fuerza (zxcvbn)?</h2>
-      <p class="muted">Es una estimación de dificultad de crackeo basada en patrones. Consejo: usa longitudes altas y mezcla de tipos de caracteres.</p>
+      <p class="muted">Es una estimación orientativa. Combina longitud alta con variedad de tipos de caracteres.</p>
 
       <h2>Necesito ayuda / reportar un bug</h2>
       <p class="muted">Escríbenos en <a href="/contacto.html">Contacto</a>.</p>
