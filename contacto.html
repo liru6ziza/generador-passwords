@@ -4,14 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <title>Política de Privacidad — PasswordMX</title>
-  <meta name="description" content="Política de privacidad de PasswordMX: generación local, sin almacenamiento de contraseñas ni rastreo invasivo." />
-  <link rel="canonical" href="https://passwordmx.online/privacy.html" />
+  <title>Contacto — PasswordMX</title>
+  <meta name="description" content="¿Tienes una sugerencia, encontraste un bug o quieres colaborar? Escríbenos por este formulario o al correo soporte@passwordmx.online." />
+  <link rel="canonical" href="https://passwordmx.online/contacto.html" />
 
   <!-- OG / Twitter -->
-  <meta property="og:title" content="Política de Privacidad — PasswordMX" />
-  <meta property="og:description" content="Conoce cómo tratamos tus datos: no guardamos contraseñas y usamos analítica sin cookies." />
-  <meta property="og:url" content="https://passwordmx.online/privacy.html" />
+  <meta property="og:title" content="Contacto — PasswordMX" />
+  <meta property="og:description" content="¿Sugerencias o bugs? Contáctanos por el formulario o por email." />
+  <meta property="og:url" content="https://passwordmx.online/contacto.html" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://passwordmx.online/og-image.png" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -23,9 +23,9 @@
   <script defer data-domain="passwordmx.online" src="https://plausible.io/js/script.js"></script>
 
   <style>
-    :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; }
+    :root{ --bg:#0f172a; --card:#111827; --muted:#94a3b8; --text:#e2e8f0; --accent:#38bdf8; --btn:#22d3ee; }
     @media (prefers-color-scheme: light){
-      :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; }
+      :root{ --bg:#f8fafc; --card:#ffffff; --muted:#475569; --text:#0f172a; --accent:#0284c7; --btn:#0ea5e9; }
     }
     html,body{ margin:0; height:100%; background:var(--bg); color:var(--text);
       font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Inter,Arial; }
@@ -34,20 +34,37 @@
     nav a{ color:var(--accent); text-decoration:none; }
     .card{ background:var(--card); border-radius:14px; padding:20px; }
     h1{ color:var(--accent); margin:4px 0 12px; }
-    h2{ margin:18px 0 6px; }
+    label{ display:block; margin:14px 0 6px; }
+    input,textarea{
+      width:100%; box-sizing:border-box; border:1px solid transparent; border-radius:12px;
+      background:#0b1220; color:var(--text); padding:12px 14px; outline:none;
+    }
+    @media (prefers-color-scheme: light){
+      input,textarea{ background:#f1f5f9; }
+    }
+    .row{ display:flex; gap:12px; flex-wrap:wrap; }
+    .btn{
+      display:inline-block; background:var(--btn); border:none; color:#002233;
+      font-weight:600; padding:10px 14px; border-radius:12px; cursor:pointer; text-decoration:none;
+    }
     .muted{ color:var(--muted); }
     footer{ text-align:center; color:var(--muted); margin:22px 0; }
   </style>
 
-  <!-- JSON-LD WebPage -->
+  <!-- JSON-LD ContactPage -->
   <script type="application/ld+json">
   {
     "@context":"https://schema.org",
-    "@type":"WebPage",
-    "name":"Política de Privacidad — PasswordMX",
-    "url":"https://passwordmx.online/privacy.html",
+    "@type":"ContactPage",
+    "name":"Contacto — PasswordMX",
+    "url":"https://passwordmx.online/contacto.html",
     "inLanguage":"es",
-    "about":{"@type":"Thing","name":"Privacidad en generador de contraseñas"}
+    "contactPoint":{
+      "@type":"ContactPoint",
+      "contactType":"support",
+      "email":"soporte@passwordmx.online",
+      "availableLanguage":["es","en"]
+    }
   }
   </script>
 </head>
@@ -56,30 +73,51 @@
     <nav>
       <a href="/">← Inicio</a>
       <a href="/faq.html">FAQ</a>
-      <a href="/contacto.html">Contacto</a>
+      <a href="/privacy.html">Privacidad</a>
     </nav>
 
     <div class="card">
-      <h1>Política de Privacidad</h1>
-      <p class="muted"><strong>Última actualización:</strong> 2025-10-20</p>
+      <h1>Contacto</h1>
+      <p class="muted">¿Tienes una sugerencia, encontraste un bug o quieres colaborar? Escríbenos.</p>
 
-      <h2>1) Generación local</h2>
-      <p>Las contraseñas y passphrases se generan en tu navegador con APIs criptográficas del propio dispositivo (<code>crypto.getRandomValues()</code>). No se envían al servidor ni se guardan en bases de datos.</p>
+      <!-- Formulario sin backend: abre cliente de correo -->
+      <form onsubmit="openMail(event)">
+        <label for="n">Nombre</label>
+        <input id="n" name="n" type="text" autocomplete="name" placeholder="Tu nombre" />
 
-      <h2>2) Analítica sin cookies</h2>
-      <p>Usamos <em>Plausible</em> para medir visitas de forma anónima y sin cookies. Nos ayuda a entender uso global (por ejemplo, páginas vistas o países agregados). No se crean perfiles individuales.</p>
+        <label for="e">Correo</label>
+        <input id="e" name="e" type="email" autocomplete="email" placeholder="tucorreo@ejemplo.com" />
 
-      <h2>3) Archivos locales y modo offline</h2>
-      <p>Utilizamos un Service Worker para ofrecer modo sin conexión. Los archivos estáticos se almacenan en tu caché del navegador y puedes borrarlos cuando quieras desde la configuración del navegador.</p>
+        <label for="m">Mensaje</label>
+        <textarea id="m" name="m" rows="6" placeholder="Cuéntanos..."></textarea>
 
-      <h2>4) Enlaces y contenido de terceros</h2>
-      <p>Algunos enlaces (por ejemplo, BuyMeACoffee) te llevan a webs de terceros con sus propias políticas.</p>
+        <div class="row" style="margin-top:14px">
+          <button class="btn" type="submit">Enviar por email</button>
+          <a class="btn" href="mailto:soporte@passwordmx.online" title="Escribir directo">Escribir directo</a>
+        </div>
 
-      <h2>5) Contacto</h2>
-      <p>Escríbenos en <a href="/contacto.html">Contacto</a>. Si prefieres correo directo: <a href="mailto:soporte@passwordmx.online">soporte@passwordmx.online</a></p>
+        <p class="muted" style="margin-top:10px">
+          * Este formulario abre tu cliente de correo. Si prefieres, escríbenos directo a
+          <a href="mailto:soporte@passwordmx.online">soporte@passwordmx.online</a>.
+        </p>
+      </form>
     </div>
 
     <footer>© 2025 PasswordMX — Hecho con 💙 en México.</footer>
   </div>
+
+  <script>
+    function openMail(ev){
+      ev.preventDefault();
+      const n = document.getElementById('n').value.trim();
+      const e = document.getElementById('e').value.trim();
+      const m = document.getElementById('m').value.trim();
+      const subject = encodeURIComponent('Contacto desde PasswordMX');
+      const body = encodeURIComponent(`Nombre: ${n}\nCorreo: ${e}\n\nMensaje:\n${m}`);
+      window.location.href = `mailto:soporte@passwordmx.online?subject=${subject}&body=${body}`;
+      // Plausible evento opcional
+      if (window.plausible) plausible('contact_mailto');
+    }
+  </script>
 </body>
 </html>
