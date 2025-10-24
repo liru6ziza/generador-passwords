@@ -147,7 +147,7 @@
     }
     .muted{color:#94a3b8}
 
-    /* Inputs / controles (estilos de ejemplo, los tuyos originales pueden seguir) */
+    /* Controles */
     .slider{width:100%}
     .row{display:grid; grid-template-columns:1fr 1fr; gap:14px}
     @media (max-width:600px){ .row{grid-template-columns:1fr 1fr} }
@@ -164,7 +164,7 @@
 
 <body>
 
-  <!-- ===== TOPBAR (fuera del contenedor centrado) ===== -->
+  <!-- ===== TOPBAR ===== -->
   <header class="topbar">
     <div class="topbar__inner">
       <div class="brand">
@@ -184,7 +184,7 @@
         <label><input type="radio" name="mode" value="pp"> Passphrase</label>
       </div>
 
-      <p style="margin:14px 0 6px">Longitud <span id="lenVal" style="float:right">16</span></p>
+      <p id="lenLabel" style="margin:14px 0 6px">Longitud <span id="lenVal" style="float:right">16</span></p>
       <input id="len" class="slider" type="range" min="8" max="64" value="16" />
 
       <div class="row" style="margin-top:12px">
@@ -202,7 +202,7 @@
       </div>
 
       <div class="meter" style="margin-top:10px"><div id="bar" style="height:100%; width:0%; border-radius:6px; background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e)"></div></div>
-      <p class="muted" style="margin:6px 0 0">Fuerza: <span id="score">—</span></p>
+      <p class="muted" style="margin:6px 0 0">Fuerza: <span id="score">—</span> <span id="bits" class="muted"></span></p>
       <button id="regen" class="btn ghost" style="margin-top:10px">↻ Regenerar</button>
     </section>
 
@@ -211,13 +211,13 @@
       <h3 style="margin:0 0 8px">¿Qué hace única a PasswordMX?</h3>
       <ul style="margin:0 0 8px 18px">
         <li><strong>Generación 100% local</strong> con <code>crypto.getRandomValues()</code>.</li>
-        <li><strong>Medidor de fuerza</strong> (zxcvbn) con estimación de tiempo de crackeo.</li>
+        <li><strong>Medidor de fuerza</strong> basado en <em>entropía</em>.</li>
         <li><strong>Opciones:</strong> símbolos, evitar repetidos, fácil de leer.</li>
         <li><strong>Modo Passphrase</strong> (frases de palabras) con separadores.</li>
       </ul>
       <p class="muted">Recomendamos usar un <em>gestor de contraseñas</em> (Bitwarden, 1Password, etc.).</p>
       <p class="muted" style="font-size:12px">Aviso: no almacenamos ni compartimos tus contraseñas. Uso bajo tu propia responsabilidad.</p>
-      <p class="muted">Si esto te sirvió, <a href="https://www.buymeacoffee.com/arakshgrollo" target="_blank" rel="noopener">invítame un café ☕</a>.</p>
+      <p class="muted">Si esto te sirvió, <a href="https://buymeacoffee.com/arkashghrollo" target="_blank" rel="noopener">invítame un café ☕</a>.</p>
     </aside>
 
     <!-- Footer -->
@@ -236,7 +236,7 @@
 
   <!-- ===== Lógica ===== -->
   <script>
-    // Service Worker
+    // ---------- Service Worker ----------
     window.addEventListener('load', () => {
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js')
@@ -245,21 +245,38 @@
       }
     });
 
-    // Generador muy simplificado (respeta tus opciones)
+    // ---------- Utilidades ----------
     const $ = s => document.querySelector(s);
-    const len = $('#len'), lenVal = $('#lenVal'), out = $('#out'), copy = $('#copy'), regen = $('#regen');
-    const flags = {u:$('#u'), l:$('#l'), d:$('#d'), s:$('#s'), easy:$('#easy'), noRep:$('#noRep')};
-    const bar = $('#bar'), scoreTxt = $('#score');
+    const rand = max => crypto.getRandomValues(new Uint32Array(1))[0] % max;
+    const log2 = x => Math.log(x) / Math.log(2);
 
+    // ---------- Controles ----------
+    const len = $('#len'), lenVal = $('#lenVal'), lenLabel = $('#lenLabel');
+    const out = $('#out'), copy = $('#copy'), regen = $('#regen');
+    const flags = {u:$('#u'), l:$('#l'), d:$('#d'), s:$('#s'), easy:$('#easy'), noRep:$('#noRep')};
+    const bar = $('#bar'), scoreTxt = $('#score'), bitsTxt = $('#bits');
+    const modeRadios = Array.from(document.querySelectorAll('input[name="mode"]'));
+
+    // pools
     const EASY = /[O0Il1]/g;
-    const SYM  = "!@#$%^&*()_+{}[]<>?=/.~-";
+    const SYM  = "!@#$%^&*()_+{}[]<>?=/.~-:";
     const U    = "ABCDEFGHJKLMNPQRSTUVWXYZ";
     const L    = "abcdefghijkmnopqrstuvwxyz";
     const D    = "23456789";
 
-    function rand(max){ return crypto.getRandomValues(new Uint32Array(1))[0] % max; }
+    // Passphrase
+    let WORDS = null;                     // array con 2048 palabras (se carga abajo)
+    const SEP_BASE = ['-', '_', '.'];     // separadores por defecto
+    const SEP_PLUS = ['-', '_', '.', ':', '/', '+', '~']; // si marcas "Símbolos"
 
-    function pool(){
+    // Carga del wordlist (no bloquea la app)
+    fetch('words-es-2048.json')
+      .then(r => r.json())
+      .then(list => { WORDS = Array.isArray(list) ? list : (list.words || []); })
+      .catch(() => console.warn('No se pudo cargar words-es-2048.json'));
+
+    // ---------- Generación ----------
+    function poolChars(){
       let p = '';
       if (flags.u.checked) p += U;
       if (flags.l.checked) p += L;
@@ -270,37 +287,101 @@
       return p;
     }
 
-    function generate(){
-      const n = parseInt(len.value, 10);
-      const p = pool();
+    function genPassword(n){
+      const p = poolChars();
       let s = '';
       while (s.length < n){
         const ch = p[rand(p.length)];
-        if (flags.noRep.checked && s.endsWith(ch)) continue;
+        if (flags.noRep.checked && s.length && s[s.length-1] === ch) continue;
         s += ch;
       }
-      out.value = s;
-      meter(s);
+      return s;
     }
 
-    // medidor (dummy si no cargas zxcvbn):
-    function meter(s){
-      // estimación simple: longitud + variedad
-      let variety = 0;
-      if (/[A-Z]/.test(s)) variety++;
-      if (/[a-z]/.test(s)) variety++;
-      if (/[0-9]/.test(s)) variety++;
-      if (/[^A-Za-z0-9]/.test(s)) variety++;
-      const sc = Math.min(100, Math.round((s.length/64)*60 + variety*10));
-      bar.style.width = sc + '%';
-      scoreTxt.textContent = sc < 35 ? 'Débil' : sc < 70 ? 'Fuerte' : 'Muy fuerte';
+    function capFirst(w){ return w.charAt(0).toUpperCase() + w.slice(1); }
+
+    function genPassphrase(wordsCount){
+      if (!WORDS || WORDS.length === 0){
+        // fallback: mientras carga wordlist, devuelve una pseudo frase segura
+        return genPassword(Math.max(12, wordsCount*4));
+      }
+      const sepPool = flags.s.checked ? SEP_PLUS : SEP_BASE;
+      const used = new Set();
+      const parts = [];
+      while (parts.length < wordsCount){
+        const w = WORDS[rand(WORDS.length)];
+        if (flags.noRep.checked && used.has(w)) continue;
+        used.add(w);
+        parts.push(flags.u.checked ? capFirst(w) : w.toLowerCase());
+      }
+      const sep = sepPool[rand(sepPool.length)];
+      let phrase = parts.join(sep);
+      if (flags.d.checked) phrase += sep + String(rand(100)).padStart(2,'0'); // un numerito opcional
+      return phrase;
     }
 
+    function isPassphraseMode(){
+      return document.querySelector('input[name="mode"]:checked').value === 'pp';
+    }
+
+    function updateLenUI(){
+      if (isPassphraseMode()){
+        len.min = 3; len.max = 12;
+        if (len.value < 3 || len.value > 12) len.value = 4;
+        lenLabel.firstChild.textContent = 'Palabras ';
+      }else{
+        len.min = 8; len.max = 64;
+        if (len.value < 8) len.value = 16;
+        lenLabel.firstChild.textContent = 'Longitud ';
+      }
+      lenVal.textContent = len.value;
+    }
+
+    function generate(){
+      const n = parseInt(len.value, 10);
+      const value = isPassphraseMode() ? genPassphrase(n) : genPassword(n);
+      out.value = value;
+      meter(value);
+    }
+
+    // ---------- Medidor de fuerza por entropía ----------
+    function meter(str){
+      let bits = 0;
+
+      if (isPassphraseMode()){
+        // entropía ≈ #palabras * log2(tamaño_wordlist) + extras
+        const wordsCount = parseInt(len.value,10);
+        const base = (WORDS && WORDS.length) ? WORDS.length : 2048;
+        bits = wordsCount * log2(base);
+        if (flags.d.checked) bits += log2(100);        // 2 dígitos
+        if (flags.s.checked) bits += log2(SEP_PLUS.length);
+        if (flags.u.checked) bits += wordsCount * 1;   // capitalización inicial ≈ 1 bit por palabra
+      }else{
+        // entropía ≈ longitud * log2(pool)
+        const p = poolChars();
+        const variety = new Set(p.split('')).size;
+        bits = str.length * log2(variety || 2);
+      }
+
+      // Mapeo de bits → 0..100 (aprox)
+      // < 40: débil, 40–80: fuerte, > 80: muy fuerte
+      const pct = Math.max(0, Math.min(100, Math.round(bits)));
+      bar.style.width = Math.min(100, pct) + '%';
+      const label = bits < 40 ? 'Débil' : bits < 80 ? 'Fuerte' : 'Muy fuerte';
+      scoreTxt.textContent = label;
+      bitsTxt.textContent = `(${Math.round(bits)} bits)`;
+    }
+
+    // ---------- Eventos ----------
     len.addEventListener('input', () => { lenVal.textContent = len.value; generate(); });
     Object.values(flags).forEach(el => el.addEventListener('change', generate));
     regen.addEventListener('click', generate);
+    modeRadios.forEach(r => r.addEventListener('change', () => { updateLenUI(); generate(); }));
+
     copy.addEventListener('click', async () => {
-      try { await navigator.clipboard.writeText(out.value); copy.textContent = '¡Copiado!'; setTimeout(()=>copy.textContent='Copiar', 900); } catch(e){}
+      try { await navigator.clipboard.writeText(out.value); copy.textContent = '¡Copiado!'; }
+      catch(e){ /* noop */ }
+      setTimeout(()=>copy.textContent='Copiar', 900);
     });
 
     // Compartir
@@ -314,7 +395,8 @@
       });
     })();
 
-    // Primera generación
+    // ---------- Primera generación ----------
+    updateLenUI();
     generate();
   </script>
 </body>
